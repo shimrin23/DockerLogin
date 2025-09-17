@@ -1,3 +1,104 @@
+# version: "3.9"
+# services:
+#   mongo:
+#     image: mongo:6
+#     container_name: mongo
+#     restart: always
+#     ports:
+#       - "27017:27017"
+#     volumes:
+#       - mongo-data:/data/db
+
+#   backend:
+#     build: ./backend
+#     container_name: backend
+#     restart: always
+#     ports:
+#       - "3001:3001"
+#     environment:
+#       - MONGO_URI=mongodb://mongo:27017/mern_db
+#     depends_on:
+#       - mongo
+
+#   frontend:
+#     build: ./frontend
+#     container_name: frontend
+#     restart: always
+#     ports:
+#       - "5173:80"
+#     depends_on:
+#       - backend
+
+# volumes:
+#   mongo-data:
+
+
+# #try2
+
+
+# version: "3.9"
+
+# services:
+#   mongo:
+#     image: mongo:6
+#     container_name: mongo
+#     restart: always
+#     ports:
+#       - "27017:27017"
+#     volumes:
+#       - mongo-data:/data/db
+#     networks:
+#       - app-network
+
+#   backend:
+#     build:
+#       context: ./backend
+#       dockerfile: Dockerfile
+#     container_name: backend
+#     command: /usr/src/app/node_modules/.bin/nodemon server.js
+#     restart: always
+#     ports:
+#       - "3001:3001"
+#     volumes:
+#       - ./backend:/usr/src/app
+#       - /usr/src/app/node_modules
+#     environment:
+#       - MONGO_URI=mongodb://mongo:27017/mern_db
+#       - NODE_ENV=development
+#     depends_on:
+#       - mongo
+#     networks:
+#       - app-network
+
+#   frontend:
+#     build:
+#       context: ./frontend
+#       dockerfile: Dockerfile
+#     container_name: frontend
+#     command: npm start
+#     restart: always
+#     ports:
+#       - "5173:5173"
+#     volumes:
+#       - ./frontend:/usr/src/app
+#       - /usr/src/app/node_modules
+#     depends_on:
+#       - backend
+#     networks:
+#       - app-network
+
+# volumes:
+#   mongo-data:
+#   node_modules:
+
+# networks:
+#   app-network:
+#     driver: bridge
+
+
+
+# try3
+
 version: "3.9"
 services:
   mongo:
@@ -8,6 +109,8 @@ services:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
+    networks:
+      - app-network
 
   backend:
     build: ./backend
@@ -19,6 +122,8 @@ services:
       - MONGO_URI=mongodb://mongo:27017/mern_db
     depends_on:
       - mongo
+    networks:
+      - app-network
 
   frontend:
     build: ./frontend
@@ -28,6 +133,12 @@ services:
       - "5173:80"
     depends_on:
       - backend
+    networks:
+      - app-network
 
 volumes:
   mongo-data:
+
+networks:
+  app-network:
+    driver: bridge
